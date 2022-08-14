@@ -2,7 +2,7 @@ package model;
 
 /**
  * Model for Elasticsearch parameters
- * 
+ *
  * @author Emilio Crespo Perán
  */
 public class ElasticsearchParameters {
