@@ -15,7 +15,11 @@ public class ElasticsearchParameters {
 	public ElasticsearchParameters() {
 		this(null, null, null, null);
 	}
-	
+
+	public ElasticsearchParameters(String operation, String host, String index) {
+		this(operation, host, index, null);
+	}
+
 	public ElasticsearchParameters(String operation, String host, String index, String document) {
 		this.operation = operation;
 		this.host = host;
