@@ -36,7 +36,10 @@
 			<version>${slf4jVersion}</version>
 		</dependency>
 
-		<!-- Project dependencies -->
+
+		<!--
+			Project dependencies
+		-->
 
 		<!-- Elasticsearch -->
 		<dependency>
@@ -52,11 +55,25 @@
 			<version>2.13.3</version>
 		</dependency>
 
-		<!-- junit 4, unit test -->
+
+
+		<!--
+			For testing
+		-->
+
+		<!-- Junit 4, unit test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
+		</dependency>
+
+		<!-- SIoT package for E2E tests -->
+		<dependency>
+			<groupId>io.github.helio-ecosystem</groupId>
+			<artifactId>helio-builder-siot</artifactId>
+			<version>0.1.6</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
