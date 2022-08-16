@@ -1,0 +1,7 @@
+<#assign conf=providers(type="FileProvider", file="./src/test/resources/e2e/elasticsearch-conf.json")>
+
+<#assign mockup={ "id": "abcd", "name": "test01", "number": 1 }>
+
+<@action type="ElasticsearchAction" data=mockup conf=conf; result>
+[=result]
+</@action>

@@ -1,0 +1,5 @@
+{
+  "operation": "create",
+  "host": "http://localhost:9200",
+  "index": "mockup"
+}
