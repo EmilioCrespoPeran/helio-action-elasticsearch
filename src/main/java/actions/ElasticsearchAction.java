@@ -18,7 +18,6 @@ import model.ElasticsearchParameters;
  * 	  		- "delete". Remove a document. It is mandatory to provide a "doc" parameter too.
  * 	 + "host" (String). Elasticsearch node location.
  * 	 + "index" (String). Name of the index to be read or stored.
- * 	 + "doc" (String). Id of the document in the index. This parameter is mandatory for update and delete operation.
  *
  * @author Emilio Crespo Perán
  */
@@ -42,10 +41,6 @@ public class ElasticsearchAction implements Action {
 
 		if (configuration.has("index")) {
 			parameters.setIndex(configuration.get("index").getAsString());
-		}
-
-		if (configuration.has("document")) {
-			parameters.setDocument(configuration.get("document").getAsString());
 		}
 	}
 

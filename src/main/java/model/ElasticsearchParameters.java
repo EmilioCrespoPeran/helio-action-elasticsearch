@@ -10,21 +10,15 @@ public class ElasticsearchParameters {
 	private String operation;
 	private String host;
 	private String index;
-	private String document;
-	
+
 	public ElasticsearchParameters() {
-		this(null, null, null, null);
+		this(null, null, null);
 	}
 
 	public ElasticsearchParameters(String operation, String host, String index) {
-		this(operation, host, index, null);
-	}
-
-	public ElasticsearchParameters(String operation, String host, String index, String document) {
 		this.operation = operation;
 		this.host = host;
 		this.index = index;
-		this.document = document;
 	}
 	
 	public String getOperation() {
@@ -49,14 +43,6 @@ public class ElasticsearchParameters {
 	
 	public void setIndex(String index) {
 		this.index = index;
-	}
-
-	public String getDocument() {
-		return document;
-	}
-
-	public void setDocument(String document) {
-		this.document = document;
 	}
 
 }

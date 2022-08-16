@@ -2,19 +2,25 @@ package service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.*;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.elasticsearch.ingest.simulate.Document;
 import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import exceptions.ElasticsearchException;
 import model.ElasticsearchParameters;
 import org.apache.http.HttpHost;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Service provided for executing Elasticsearch operations.
@@ -46,23 +52,25 @@ public class ElasticsearchService {
         return client;
     }
 
-
-
-
     public String query(ElasticsearchParameters parameters, String data) throws ElasticsearchException {
         ElasticsearchClient client = createClient(parameters);
-
-        Reader json = new StringReader(data);
-        SearchRequest request = SearchRequest.of(b -> b
-                .index(parameters.getIndex())
-                .withJson(json)
-        );
 
         String result;
 
         try {
-            SearchResponse response = client.search(request, String.class);
-            result = new Gson().toJson(response.hits().hits());
+            Reader json = new StringReader(data);
+            SearchRequest request = SearchRequest.of(b -> b
+                    .index(parameters.getIndex())
+                    .withJson(json)
+            );
+
+            SearchResponse<JsonData> response = client.search(request, JsonData.class);
+            ArrayList responseData = new ArrayList<>();
+            Gson gson = new Gson();
+            for (Hit<JsonData> h : response.hits().hits()) {
+                responseData.add(gson.fromJson(h.source().toString(), JsonObject.class));
+            }
+            result = new Gson().toJson(responseData);
         }
         catch (Exception e) {
             throw new ElasticsearchException(e.getMessage());
@@ -77,15 +85,14 @@ public class ElasticsearchService {
     public String create(ElasticsearchParameters parameters, String data) throws ElasticsearchException {
         ElasticsearchClient client = createClient(parameters);
 
-        Reader json = new StringReader(data);
-        IndexRequest<JsonData> request = IndexRequest.of(b -> b
-                .index(parameters.getIndex())
-                .withJson(json)
-        );
-
-        String result;
+        String result = null;
 
         try {
+            Reader json = new StringReader(data);
+            IndexRequest<JsonData> request = IndexRequest.of(b -> b
+                    .index(parameters.getIndex())
+                    .withJson(json)
+            );
             result = client.index(request).result().jsonValue();
         }
         catch (Exception e) {
@@ -101,17 +108,14 @@ public class ElasticsearchService {
     public String update(ElasticsearchParameters parameters, String data) throws ElasticsearchException {
         ElasticsearchClient client = createClient(parameters);
 
-        Reader json = new StringReader(data);
-        UpdateRequest request = UpdateRequest.of(b -> b
-                .index(parameters.getIndex())
-                .id(parameters.getDocument())
-                .withJson(json)
-        );
-
-        String result;
+        String result = null;
 
         try {
-            result = client.update(request, String.class).result().jsonValue();
+            Reader json = new StringReader(data);
+            result = client.updateByQuery(UpdateByQueryRequest.of(b -> b
+                    .index(parameters.getIndex())
+                    .withJson(json))
+            ).deleted().toString();
         }
         catch (Exception e) {
             throw new ElasticsearchException(e.getMessage());
@@ -123,18 +127,17 @@ public class ElasticsearchService {
         return result;
     }
 
-    public String delete(ElasticsearchParameters parameters) throws ElasticsearchException {
+    public String delete(ElasticsearchParameters parameters, String data) throws ElasticsearchException {
         ElasticsearchClient client = createClient(parameters);
 
-        DeleteRequest request = DeleteRequest.of(b -> b
-                .index(parameters.getIndex())
-                .id(parameters.getDocument())
-        );
-
-        String result;
+        String result = null;
 
         try {
-            result = client.delete(request).result().jsonValue();
+            Reader json = new StringReader(data);
+            result = client.deleteByQuery(DeleteByQueryRequest.of(b -> b
+                        .index(parameters.getIndex())
+                        .withJson(json))
+            ).deleted().toString();
         }
         catch (Exception e) {
             throw new ElasticsearchException(e.getMessage());

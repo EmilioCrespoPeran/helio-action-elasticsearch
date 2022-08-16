@@ -43,7 +43,7 @@ public class ElasticsearchController {
 			results = this.service.update(parameters, data);
 		}
 		else if (parameters.getOperation().equalsIgnoreCase("delete")) {
-			results = this.service.delete(parameters);
+			results = this.service.delete(parameters, data);
 		}
 
 		return results;
@@ -54,7 +54,6 @@ public class ElasticsearchController {
 		ElasticsearchValidationParameterController.operation(parameters.getOperation());
 		ElasticsearchValidationParameterController.host(parameters.getHost());
 		ElasticsearchValidationParameterController.index(parameters.getIndex());
-		ElasticsearchValidationParameterController.document(parameters.getOperation(), parameters.getDocument());
 
 		// Validates input data
 		ElasticsearchValidationParameterController.data(parameters.getOperation(), data);

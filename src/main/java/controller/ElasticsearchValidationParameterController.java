@@ -50,17 +50,6 @@ public class ElasticsearchValidationParameterController {
         }
     }
 
-    public static void document(String operation, String value) throws ElasticsearchConfigurationException {
-        if (operation.equalsIgnoreCase("update") || operation.equalsIgnoreCase("delete")) {
-            try {
-                empty(value);
-            }
-            catch (ElasticsearchConfigurationException e) {
-                throw new ElasticsearchConfigurationException("Document ID cannot be empty with update o delete operation");
-            }
-        }
-    }
-
     public static void data(String operation, String value) throws ElasticsearchConfigurationException {
         if (!operation.equalsIgnoreCase("delete")) {
             empty(value);
