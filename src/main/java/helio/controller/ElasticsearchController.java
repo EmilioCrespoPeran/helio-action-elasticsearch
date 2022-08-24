@@ -1,9 +1,9 @@
-package controller;
+package helio.controller;
 
-import exceptions.ElasticsearchConfigurationException;
-import exceptions.ElasticsearchException;
-import model.ElasticsearchParameters;
-import service.ElasticsearchService;
+import helio.exceptions.ElasticsearchConfigurationException;
+import helio.exceptions.ElasticsearchException;
+import helio.model.ElasticsearchParameters;
+import helio.service.ElasticsearchService;
 
 /**
  * Main controller for Elasticsearch operations.

@@ -1,8 +1,8 @@
 package service;
 
-import exceptions.ElasticsearchException;
-import model.ElasticsearchParameters;
-import org.junit.Before;
+import helio.exceptions.ElasticsearchException;
+import helio.model.ElasticsearchParameters;
+import helio.service.ElasticsearchService;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import utils.MockupModel;

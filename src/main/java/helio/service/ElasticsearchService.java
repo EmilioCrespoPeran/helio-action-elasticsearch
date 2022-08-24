@@ -1,20 +1,17 @@
-package service;
+package helio.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import co.elastic.clients.elasticsearch.ingest.simulate.Document;
 import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import exceptions.ElasticsearchException;
-import model.ElasticsearchParameters;
+import helio.exceptions.ElasticsearchException;
+import helio.model.ElasticsearchParameters;
 import org.apache.http.HttpHost;
-import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 
 import java.io.Reader;

@@ -1,4 +1,4 @@
-package exceptions;
+package helio.exceptions;
 
 import helio.blueprints.exceptions.ActionException;
 

@@ -1,13 +1,12 @@
 package service;
 
-import exceptions.ElasticsearchException;
-import model.ElasticsearchParameters;
+import helio.exceptions.ElasticsearchException;
+import helio.model.ElasticsearchParameters;
+import helio.service.ElasticsearchService;
 import org.junit.Before;
 import org.junit.Test;
 import utils.MockupModel;
 import utils.TestUtils;
-
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

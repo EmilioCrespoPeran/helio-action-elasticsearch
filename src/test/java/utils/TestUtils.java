@@ -2,14 +2,11 @@ package utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import helio.blueprints.TranslationUnit;
-import model.ElasticsearchParameters;
+import helio.model.ElasticsearchParameters;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class TestUtils {
 

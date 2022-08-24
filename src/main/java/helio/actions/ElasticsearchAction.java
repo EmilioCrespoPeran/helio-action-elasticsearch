@@ -1,11 +1,11 @@
-package actions;
+package helio.actions;
 
 import com.google.gson.JsonObject;
 
-import controller.ElasticsearchController;
+import helio.controller.ElasticsearchController;
 import helio.blueprints.Action;
 import helio.blueprints.exceptions.ActionException;
-import model.ElasticsearchParameters;
+import helio.model.ElasticsearchParameters;
 
 /**
  * A component which executes Elasticsearch operations.
