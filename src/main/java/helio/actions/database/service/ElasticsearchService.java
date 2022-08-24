@@ -1,4 +1,4 @@
-package helio.service;
+package helio.actions.database.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.*;
@@ -9,8 +9,8 @@ import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import helio.exceptions.ElasticsearchException;
-import helio.model.ElasticsearchParameters;
+import helio.actions.database.exceptions.ElasticsearchException;
+import helio.actions.database.model.ElasticsearchParameters;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 

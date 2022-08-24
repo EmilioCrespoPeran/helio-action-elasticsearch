@@ -1,4 +1,4 @@
-package helio.model;
+package helio.actions.database.model;
 
 /**
  * Model for Elasticsearch parameters

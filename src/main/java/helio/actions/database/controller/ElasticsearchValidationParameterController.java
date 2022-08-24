@@ -1,6 +1,6 @@
-package helio.controller;
+package helio.actions.database.controller;
 
-import helio.exceptions.ElasticsearchConfigurationException;
+import helio.actions.database.exceptions.ElasticsearchConfigurationException;
 
 import java.net.MalformedURLException;
 import java.net.URL;

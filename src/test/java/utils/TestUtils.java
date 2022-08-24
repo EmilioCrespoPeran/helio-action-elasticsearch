@@ -2,7 +2,7 @@ package utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import helio.model.ElasticsearchParameters;
+import helio.actions.database.model.ElasticsearchParameters;
 
 import java.lang.reflect.Type;
 import java.util.List;
