@@ -12,21 +12,10 @@ import service.ElasticsearchService;
  */
 public class ElasticsearchController {
 
-	private static ElasticsearchController singleton = null;
-	private ElasticsearchService service;
+	private static ElasticsearchService service = new ElasticsearchService();
 
-	private ElasticsearchController() {
-		this.service = new ElasticsearchService();
-	}
-	
+
 	public static String execute(ElasticsearchParameters parameters, String data) throws ElasticsearchConfigurationException, ElasticsearchException {
-		if (singleton == null) {
-			singleton = new ElasticsearchController();
-		}
-		return singleton.process(parameters, data);
-	}
-	
-	private String process(ElasticsearchParameters parameters, String data) throws ElasticsearchConfigurationException, ElasticsearchException {
 		// Validates parameters and data incomming
 		validate(parameters, data);
 		
@@ -34,22 +23,22 @@ public class ElasticsearchController {
 		String results = null;
 
 		if (parameters.getOperation().equalsIgnoreCase("query")) {
-			results = this.service.query(parameters, data);
+			results = service.query(parameters, data);
 		}
 		else if (parameters.getOperation().equalsIgnoreCase("create")) {
-			results = this.service.create(parameters, data);
+			results = service.create(parameters, data);
 		}
 		else if (parameters.getOperation().equalsIgnoreCase("update")) {
-			results = this.service.update(parameters, data);
+			results = service.update(parameters, data);
 		}
 		else if (parameters.getOperation().equalsIgnoreCase("delete")) {
-			results = this.service.delete(parameters, data);
+			results = service.delete(parameters, data);
 		}
 
 		return results;
 	}
 
-	private void validate(ElasticsearchParameters parameters, String data) throws ElasticsearchConfigurationException {
+	private static void validate(ElasticsearchParameters parameters, String data) throws ElasticsearchConfigurationException {
 		// Validates elasticsearch configuration
 		ElasticsearchValidationParameterController.operation(parameters.getOperation());
 		ElasticsearchValidationParameterController.host(parameters.getHost());

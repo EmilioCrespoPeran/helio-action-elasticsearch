@@ -21,9 +21,9 @@ public class ElasticsearchValidationParameterController {
         }
 
         if (!value.equalsIgnoreCase("query")
-        || !value.equalsIgnoreCase("create")
-        || !value.equalsIgnoreCase("update")
-        || !value.equalsIgnoreCase("delete")) {
+        && !value.equalsIgnoreCase("create")
+        && !value.equalsIgnoreCase("update")
+        && !value.equalsIgnoreCase("delete")) {
             throw new ElasticsearchConfigurationException("Operation not implemented");
         }
     }
