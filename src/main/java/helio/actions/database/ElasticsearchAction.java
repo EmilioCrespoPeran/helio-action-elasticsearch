@@ -14,8 +14,8 @@ import helio.actions.database.model.ElasticsearchParameters;
  * 	 + "operation" (String). Values admitted:
  * 	  		- "query". Executes search request.
  * 	  		- "create". Index new documents.
- * 	  		- "update". Update a document. It is mandatory to provide a "doc" parameter too.
- * 	  		- "delete". Remove a document. It is mandatory to provide a "doc" parameter too.
+ * 	  		- "update". Update a document.
+ * 	  		- "delete". Remove a document.
  * 	 + "host" (String). Elasticsearch node location.
  * 	 + "index" (String). Name of the index to be read or stored.
  *
