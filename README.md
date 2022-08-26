@@ -18,6 +18,6 @@ Data value is used with the previous configuration in order to execute querys.
 
 Use the following coordinates for importer the Elasticsearch action as an external component for the Helio ecosystem:
 
-* source ```https://github.com/EmilioCrespoPeran/helio-action-elasticsearch/releases/download/v0.1.0/helio-action-elasticsearch-0.1.0.jar```
+* source ```https://github.com/helio-ecosystem/helio-action-elasticsearch/releases/download/v0.1.0/helio-action-elasticsearch-0.1.0.jar```
 * class ```helio.actions.database.ElasticsearchAction```
 * type ```ACTION```
