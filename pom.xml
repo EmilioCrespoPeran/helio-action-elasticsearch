@@ -5,7 +5,7 @@
 	<groupId>io.github.helio-ecosystem</groupId>
 	<artifactId>helio-action-elasticsearch</artifactId>
 	<version>0.1.2</version>
-	<name>Elasticsearch database action XML data handler</name>
+	<name>Elasticsearch database action</name>
 	<description>This data action allows you to read and write data to Elasticsearch database</description>
 
 	<properties>
