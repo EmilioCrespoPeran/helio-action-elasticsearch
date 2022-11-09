@@ -67,7 +67,9 @@ public class ElasticsearchService {
             ArrayList responseData = new ArrayList<>();
             Gson gson = new Gson();
             for (Hit<JsonData> h : response.hits().hits()) {
-                responseData.add(gson.fromJson(h.source().toString(), JsonObject.class));
+                JsonObject j = gson.fromJson(h.source().toString(), JsonObject.class);
+                j.addProperty("id", h.id());
+                responseData.add(j);
             }
             result = new Gson().toJson(responseData);
         }
