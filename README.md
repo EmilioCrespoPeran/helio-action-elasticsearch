@@ -20,8 +20,8 @@ Use the following coordinates for importer the Elasticsearch action as an extern
 
 ```json
 {
-    "source": "https://github.com/helio-ecosystem/helio-action-elasticsearch/releases/download/v0.1.1/helio-action-elasticsearch-0.1.1.jar",
-    "clazz": "helio.actions.database.ElasticsearchAction",
+    "source": "https://github.com/helio-ecosystem/helio-action-elasticsearch/releases/download/v0.1.2/helio-action-elasticsearch-0.1.2.jar",
+    "clazz": "helio.actions.database.Elasticsearch",
     "type": "ACTION"
 }
 ```
