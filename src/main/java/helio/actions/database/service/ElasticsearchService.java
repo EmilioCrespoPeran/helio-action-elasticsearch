@@ -7,17 +7,19 @@ import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.fasterxml.jackson.databind.util.RawValue;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import helio.actions.database.exceptions.ElasticsearchException;
 import helio.actions.database.model.ElasticsearchParameters;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Service provided for executing Elasticsearch operations.
@@ -85,12 +87,34 @@ public class ElasticsearchService {
         String result = null;
 
         try {
-            Reader json = new StringReader(data);
-            IndexRequest<JsonData> request = IndexRequest.of(b -> b
-                    .index(parameters.getIndex())
-                    .withJson(json)
-            );
-            result = client.index(request).result().jsonValue();
+            JsonElement jsonData = new Gson().fromJson(data, JsonElement.class);
+            if (jsonData.isJsonArray()) {
+                BulkRequest.Builder br = new BulkRequest.Builder();
+                for (JsonElement json : jsonData.getAsJsonArray()) {
+                    br.operations(op -> op.index(idx -> idx
+                        .index(parameters.getIndex())
+                        .document(new RawValue(json.getAsJsonObject().toString()))));
+                }
+
+                BulkResponse r = client.bulk(br.build());
+                if (r.errors()) {
+                    result = r.items().stream()
+                        .filter(p -> p.error() != null)
+                        .map(m -> m.error().reason())
+                        .collect(Collectors.joining(","));
+                }
+                else {
+                    result = "created";
+                }
+            }
+            else {
+                Reader json = new StringReader(data);
+                IndexRequest<JsonData> request = IndexRequest.of(b -> b
+                        .index(parameters.getIndex())
+                        .withJson(json)
+                );
+                result = client.index(request).result().jsonValue();
+            }
         }
         catch (Exception e) {
             throw new ElasticsearchException(e.getMessage());

@@ -9,6 +9,8 @@ import utils.TestUtils;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 public class ElasticsearchCreateTests {
 
     private ElasticsearchService service = new ElasticsearchService();
@@ -31,6 +33,18 @@ public class ElasticsearchCreateTests {
         model.setAge(null);
 
         String obtained = service.create(parameters, TestUtils.toJson(model));
+        String expected = "created";
+
+        assertEquals(expected, obtained);
+    }
+
+
+    @Test
+    public void test03_CreateMultipleData() throws ElasticsearchException {
+        ElasticsearchParameters parameters = TestUtils.createParameters();
+        List<MockupModel> data = List.of(TestUtils.createModel(), TestUtils.createModel(), TestUtils.createModel());
+
+        String obtained = service.create(parameters, TestUtils.toJson(data));
         String expected = "created";
 
         assertEquals(expected, obtained);
