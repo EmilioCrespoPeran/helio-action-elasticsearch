@@ -21,7 +21,7 @@ import helio.actions.database.model.ElasticsearchParameters;
  *
  * @author Emilio Crespo Perán
  */
-public class ElasticsearchAction implements Action {
+public class Elasticsearch implements Action {
 
 	private ElasticsearchParameters parameters = new ElasticsearchParameters();
 
