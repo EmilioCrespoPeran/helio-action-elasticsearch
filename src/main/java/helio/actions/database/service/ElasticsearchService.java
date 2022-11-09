@@ -39,8 +39,7 @@ public class ElasticsearchService {
             RestClient restClient = RestClient.builder(new HttpHost(hostname, port)).build();
             ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
             client = new ElasticsearchClient(transport);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // An error cause the client creation
         }
 
@@ -60,8 +59,9 @@ public class ElasticsearchService {
             Reader json = new StringReader(data);
             SearchRequest request = SearchRequest.of(b -> b
                     .index(parameters.getIndex())
-                    .withJson(json)
-            );
+                    .withJson(json));
+
+            waitOperation(1);
 
             SearchResponse<JsonData> response = client.search(request, JsonData.class);
             ArrayList responseData = new ArrayList<>();
@@ -87,34 +87,12 @@ public class ElasticsearchService {
         String result = null;
 
         try {
-            JsonElement jsonData = new Gson().fromJson(data, JsonElement.class);
-            if (jsonData.isJsonArray()) {
-                BulkRequest.Builder br = new BulkRequest.Builder();
-                for (JsonElement json : jsonData.getAsJsonArray()) {
-                    br.operations(op -> op.index(idx -> idx
-                        .index(parameters.getIndex())
-                        .document(new RawValue(json.getAsJsonObject().toString()))));
-                }
+            BulkRequest request = createBulkRequest(parameters.getIndex(), data);
 
-                BulkResponse r = client.bulk(br.build());
-                if (r.errors()) {
-                    result = r.items().stream()
-                        .filter(p -> p.error() != null)
-                        .map(m -> m.error().reason())
-                        .collect(Collectors.joining(","));
-                }
-                else {
-                    result = "created";
-                }
-            }
-            else {
-                Reader json = new StringReader(data);
-                IndexRequest<JsonData> request = IndexRequest.of(b -> b
-                        .index(parameters.getIndex())
-                        .withJson(json)
-                );
-                result = client.index(request).result().jsonValue();
-            }
+            waitOperation(1);
+
+            BulkResponse response = client.bulk(request);
+            result = processBulkResponse(response, true);
         }
         catch (Exception e) {
             throw new ElasticsearchException(e.getMessage());
@@ -132,11 +110,12 @@ public class ElasticsearchService {
         String result = null;
 
         try {
-            Reader json = new StringReader(data);
-            result = client.updateByQuery(UpdateByQueryRequest.of(b -> b
-                    .index(parameters.getIndex())
-                    .withJson(json))
-            ).deleted().toString();
+            BulkRequest request = createBulkRequest(parameters.getIndex(), data);
+
+            waitOperation(1);
+
+            BulkResponse response = client.bulk(request);
+            result = processBulkResponse(response, false);
         }
         catch (Exception e) {
             throw new ElasticsearchException(e.getMessage());
@@ -155,19 +134,66 @@ public class ElasticsearchService {
 
         try {
             Reader json = new StringReader(data);
+
+            waitOperation(1);
+
             result = client.deleteByQuery(DeleteByQueryRequest.of(b -> b
-                        .index(parameters.getIndex())
-                        .withJson(json))
-            ).deleted().toString();
-        }
-        catch (Exception e) {
+                    .index(parameters.getIndex())
+                    .withJson(json))).deleted().toString();
+        } catch (Exception e) {
             throw new ElasticsearchException(e.getMessage());
-        }
-        finally {
+        } finally {
             client.shutdown();
         }
 
         return result;
+    }
+
+    private BulkRequest createBulkRequest(String index, String data) {
+        JsonElement jsonData = new Gson().fromJson(data, JsonElement.class);
+        BulkRequest.Builder br = new BulkRequest.Builder();
+        if (jsonData.isJsonArray()) {
+            for (JsonElement json : jsonData.getAsJsonArray()) {
+                br.operations(op -> op.index(idx -> idx
+                        .index(index)
+                        .id(json.getAsJsonObject().has("id") ? json.getAsJsonObject().get("id").getAsString() : null)
+                        .document(new RawValue(json.getAsJsonObject().toString()))));
+            }
+        }
+        else {
+            br.operations(op -> op.index(idx -> idx
+                .index(index)
+                .id(jsonData.getAsJsonObject().has("id") ? jsonData.getAsJsonObject().get("id").getAsString() : null)
+                .document(new RawValue(jsonData.getAsJsonObject().toString()))));
+        }
+
+        return br.build();
+    }
+
+    private String processBulkResponse(BulkResponse response, boolean isCreation) {
+        String result = isCreation ? "created" : "updated";
+        if (response.errors()) {
+            result = response.items().stream()
+                    .filter(p -> p.error() != null)
+                    .map(m -> m.error().reason())
+                    .collect(Collectors.joining(","));
+        }
+
+        return result;
+    }
+
+    /**
+     * Waits one second before executing query because Elasticsearch save data in
+     * async mode.
+     * Only applied for query, update and delete operations
+     * 
+     * @param seconds
+     */
+    private void waitOperation(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (Exception e) {
+        }
     }
 
 }
