@@ -37,6 +37,10 @@ public class TestUtils {
     public static String toJson(MockupModel model) {
         return new Gson().toJson(model);
     }
+    
+    public static String toJson(List<MockupModel> model) {
+        return new Gson().toJson(model);
+    }
 
     public static List<MockupModel> toModel(String json) {
         Type founderListType = new TypeToken<List<MockupModel>>(){}.getType();
